@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Menú Principal</title>
+</head>
+
+<header>
+    <div class="logo">
+        <img src="image/logo_temporal.png" alt="IGOR Logo">
+        <span>IGOR</span>
+
+        <div style="padding: 10px; background: #00A3E0; text-align: right;">
+            <strong><?= $tipoUsuario ?></strong>
+        </div>
+    </div>
+    <nav>
+        <ul class="listas-index">
+            <li><a href="#contact-info">Contactanos</a></li>
+
+        </ul>
+        <div class="botones-index">
+            <a class="buton">Salir</a>
+        </div>
+    </nav>
+</header>
+
+<div class="fondoLogin">
+    <img class="transicion active" src="image/fondoIndex.jpg" alt="fondofodnofodhsadas">
+</div>
+<body>
+<h1>Menú Principal</h1>
+
+<ul>
+    <li th:each="opcion : ${opciones}">
+        <a th:href="@{${opcion[1]}}" th:text="${opcion[0]}"></a>
+    </li>
+</ul>
+
+</body>
+</html>
