@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar Recurso - IGOR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+  <div class="flex flex-1">
+    <!-- Sidebar -->
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 max-w-3xl mx-auto space-y-6">
+
+      <h1 class="text-4xl font-bold mb-6 text-center">Agregar Recurso</h1>
+
+      <form th:action="@{/recursos/guardar}" th:object="${recurso}" method="post" class="bg-white p-6 rounded shadow space-y-4">
+        
+        <div>
+          <label class="block font-semibold mb-1">Nombre:</label>
+          <input type="text" th:field="*{nombre}" required
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Tipo:</label>
+          <select th:field="*{tipo}" required
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">-- Seleccionar --</option>
+            <option value="Infraestructura">Infraestructura</option>
+            <option value="Humano">Humano</option>
+            <option value="Herramienta">Herramienta</option>
+            <option value="Software">Software</option>
+            <option value="Licencia">Licencia</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Cantidad:</label>
+          <input type="number" th:field="*{cantidad}" required
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Disponible:</label>
+          <select th:field="*{disponibilidad}" 
+                  class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" 
+                  class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded font-semibold transition">
+            Guardar Recurso
+          </button>
+        </div>
+
+      </form>
+
+      <div class="text-center">
+        <a th:href="@{/recursos}" class="text-gray-700 hover:text-gray-900 font-semibold">← Volver</a>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

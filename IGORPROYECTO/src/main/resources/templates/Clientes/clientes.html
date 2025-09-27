@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - IGOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <h1 class="text-4xl font-bold mb-6">Gestión de Clientes</h1>
+
+            <!-- Botones siempre visibles -->
+            <nav class="space-y-4">
+                <a th:href="@{/registro}" 
+                   class="block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded font-semibold transition">
+                   Crear Usuario
+                </a>
+
+                <a th:href="@{/Clientes/ListaClientes}" 
+                   class="block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded font-semibold transition">
+                   Consultar Lista Usuarios
+                </a>
+
+                <a th:href="@{/Documentacion/ListaDocumentos}" 
+                   class="block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded font-semibold transition">
+                   Consultar Documentacion
+                </a>
+
+                <a th:href="@{/home}" 
+                   class="block bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded font-semibold transition">
+                   Volver al menú
+                </a>
+            </nav>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

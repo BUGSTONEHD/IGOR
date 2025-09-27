@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear documento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+
+        <!-- Contenido principal -->
+        <main class="flex-1 p-8 max-w-4xl mx-auto space-y-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Crear nuevo documento</h1>
+
+            <form th:action="@{/Documentacion/guardar}" th:object="${documentacion}" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Nombre</label>
+                    <input type="text" th:field="*{nombre}" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Nombre Proyecto</label>
+                    <input type="text" th:field="*{nombreProyecto}" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Tipo</label>
+                    <input type="text" th:field="*{tipo}" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Descripción</label>
+                    <textarea th:field="*{descripcion}" rows="4" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Estado</label>
+                    <input type="text" th:field="*{estado}" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Propietario</label>
+                    <input type="text" th:field="*{propietario}" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div class="flex items-center justify-between pt-4">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        Guardar
+                    </button>
+
+                    <a th:href="@{/Documentacion/editar}" class="text-blue-600 hover:underline font-semibold">
+                        Ir a edición
+                    </a>
+                </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

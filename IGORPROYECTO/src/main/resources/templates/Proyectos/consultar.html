@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultar Proyectos - IGOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8 space-y-8">
+
+            <section class="text-center">
+                <h1 class="text-4xl font-bold mb-6">Lista de Proyectos</h1>
+            </section>
+
+            <section class="overflow-x-auto">
+                <table class="min-w-full bg-gray-200 rounded shadow divide-y divide-gray-300">
+                    <thead class="bg-gray-300">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-gray-800 font-semibold">Nombre del Proyecto</th>
+                            <th class="px-6 py-3 text-left text-gray-800 font-semibold">Serial</th>
+                            <th class="px-6 py-3 text-left text-gray-800 font-semibold">Cliente</th>
+                            <th class="px-6 py-3 text-left text-gray-800 font-semibold">Responsable</th>
+                            <th class="px-6 py-3 text-left text-gray-800 font-semibold">Inicio</th>
+                            <th class="px-6 py-3 text-left text-gray-800 font-semibold">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300">
+                        <tr th:each="proyecto : ${proyectos}" class="bg-gray-100">
+                            <td class="px-6 py-4" th:text="${proyecto.nombre}"></td>
+                            <td class="px-6 py-4" th:text="${proyecto.serial}"></td>
+                            <td class="px-6 py-4" th:text="${proyecto.cliente}"></td>
+                            <td class="px-6 py-4" th:text="${proyecto.responsable}"></td>
+                            <td class="px-6 py-4" th:text="${proyecto.fechaInicio}"></td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a th:href="@{/proyectos/editar/{id}(id=${proyecto.id})}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"> Editar 
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="text-center">
+                <a th:href="@{/proyectos}" 
+                   class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded font-semibold transition">
+                   Volver al menú
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

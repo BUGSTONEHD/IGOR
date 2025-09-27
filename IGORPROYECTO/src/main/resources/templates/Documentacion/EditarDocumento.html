@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:inline="javascript">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Documentación</title>
+    <script th:src="@{/js/editar.js}"></script>
+     <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+        <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+
+  <main class="flex-1 p-6 bg-white shadow-md rounded-md mx-8 my-6">
+    <!-- Título -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Editar Documentación</h1>
+        <a th:href="@{/NuevoDocumento}"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold">
+            Nuevo Documento
+        </a>
+    </div>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 text-sm rounded-md shadow-sm">
+            <thead class="bg-gray-100 text-left text-gray-600 uppercase font-semibold">
+                <tr>
+                    <th class="px-6 py-3">Nombre</th>
+                    <th class="px-6 py-3">Proyecto</th>
+                    <th class="px-6 py-3">Tipo</th>
+                    <th class="px-6 py-3">Descripción</th>
+                    <th class="px-6 py-3">Fecha</th>
+                    <th class="px-6 py-3">Estado</th>
+                    <th class="px-6 py-3">Propietario</th>
+                    <th class="px-6 py-3 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 divide-y divide-gray-200">
+                <tr th:each="documentacion : ${documentacion}" class="hover:bg-gray-50">
+                    <td class="px-6 py-4" th:text="${documentacion.nombre}">Nombre</td>
+                    <td class="px-6 py-4" th:text="${documentacion.nombreProyecto}">Proyecto</td>
+                    <td class="px-6 py-4" th:text="${documentacion.tipo}">Tipo</td>
+                    <td class="px-6 py-4" th:text="${documentacion.descripcion}">Descripción</td>
+                    <td class="px-6 py-4" th:text="${#dates.format(documentacion.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                    <td class="px-6 py-4" th:text="${documentacion.estado}">Estado</td>
+                    <td class="px-6 py-4" th:text="${documentacion.propietario}">Propietario</td>
+                    <td class="px-6 py-4 text-center">
+                        <button type="button"
+                                class="text-blue-600 hover:text-blue-800 font-medium"
+                                th:attr="onclick=|FormularioEdit('${documentacion.id}')|"> Editar </button>
+                    </td>
+                </tr>
+
+                <!-- Fila editable --> <!--Tip y importante para entender esto  th attr tiene la misma funcion que th id solo que aca |
+                 lo que hace es que es como si fuera texto para que el thymeleaf lo lea como texto y no como atributo  -->
+                <tr th:each="documentacion : ${documentacion}" th:id="'formulario-' + ${documentacion.id}" class="hidden">
+                    <td colspan="8" class="px-6 py-4 bg-gray-50">
+                        <form th:action="@{/Documentacion/editar}" method="post" class="space-y-4">
+                            <input type="hidden" name="id" th:value="${documentacion.id}" />
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="block text-sm">
+                                    Nombre:
+                                    <input type="text" name="nombre" th:value="${documentacion.nombre}"
+                                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md" required />
+                                </label>
+
+                                <label class="block text-sm">
+                                    Proyecto:
+                                    <input type="text" name="nombreProyecto" th:value="${documentacion.nombreProyecto}"
+                                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md" required />
+                                </label>
+
+                                <label class="block text-sm">
+                                    Tipo:
+                                    <input type="text" name="tipo" th:value="${documentacion.tipo}"
+                                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md" required />
+                                </label>
+
+                                <label class="block text-sm">
+                                    Descripción:
+                                    <input type="text" name="descripcion" th:value="${documentacion.descripcion}"
+                                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md" required />
+                                </label>
+
+                                <label class="block text-sm">
+                                    Estado:
+                                    <input type="text" name="estado" th:value="${documentacion.estado}"
+                                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md" required />
+                                </label>
+
+                                <label class="block text-sm">
+                                    Propietario:
+                                    <input type="text" name="propietario" th:value="${documentacion.propietario}"
+                                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md" required />
+                                </label>
+                            </div>
+
+                            <div class="flex justify-end space-x-3 mt-4">
+                                <button type="submit"
+                                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
+                                    Guardar
+                                </button>
+                                <button type="button"
+                                        th:attr="onclick=|FormularioEdit('${documentacion.id}')|"
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+     </main>
+ </div>
+
+ <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Recursos Disponibles - IGOR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+  <div class="flex flex-1">
+    <!-- Sidebar -->
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 max-w-6xl mx-auto space-y-8">
+
+      <section class="flex justify-between items-center">
+        <h1 class="text-4xl font-bold mb-4">Recursos Disponibles</h1>
+        <a th:href="@{/recursos}" 
+           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded font-semibold transition">
+           Volver
+        </a>
+      </section>
+
+      <section class="overflow-x-auto">
+        <table class="min-w-full bg-gray-200 rounded shadow divide-y divide-gray-300">
+          <thead class="bg-gray-300">
+            <tr>
+              <th class="px-6 py-3 text-left text-gray-800 font-semibold">Nombre</th>
+              <th class="px-6 py-3 text-left text-gray-800 font-semibold">Tipo</th>
+              <th class="px-6 py-3 text-left text-gray-800 font-semibold">Cantidad</th>
+              <th class="px-6 py-3 text-left text-gray-800 font-semibold">Disponible</th>
+              <th class="px-6 py-3 text-left text-gray-800 font-semibold">Asignado a</th>
+              <th class="px-6 py-3 text-left text-gray-800 font-semibold">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-300">
+            <tr th:each="recurso : ${recursos}" class="bg-gray-100">
+              <td class="px-6 py-4" th:text="${recurso.nombre}"></td>
+              <td class="px-6 py-4" th:text="${recurso.tipo}"></td>
+              <td class="px-6 py-4" th:text="${recurso.cantidad}"></td>
+              <td class="px-6 py-4">
+                <span th:if="${recurso.disponibilidad}">Sí</span>
+                <span th:unless="${recurso.disponibilidad}">No</span>
+              </td>
+              <td class="px-6 py-4">
+                <span th:if="${#lists.isEmpty(recurso.asignadoA)}">Ninguno</span>
+                <span th:if="${!#lists.isEmpty(recurso.asignadoA)}" 
+                      th:text="${#strings.arrayJoin(recurso.asignadoA, ', ')}">Asignados</span>
+              </td>
+              <td class="px-6 py-4 space-x-2">
+                <div th:if="${rol == 'administrador'}" class="flex space-x-2">
+                  <a th:href="@{/recursos/editar/{id}(id=${recurso.id})}" 
+                     class="text-indigo-600 hover:text-indigo-800 font-semibold">Editar</a>
+                  <a th:href="@{/recursos/asignar/{id}(id=${recurso.id})}" 
+                     class="text-green-600 hover:text-green-800 font-semibold">Asignar</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>
