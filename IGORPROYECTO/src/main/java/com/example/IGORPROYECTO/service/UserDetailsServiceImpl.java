@@ -1,5 +1,8 @@
 package com.example.IGORPROYECTO.service;
 
+import java.util.Collections;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,11 +23,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsuario(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    Usuario usuario = usuarioRepository.findByUsuario(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
-        return User.withUsername(usuario.getUsuario())
-                .password(usuario.getContrasena())
-                .build();
-    }
+    return User.withUsername(usuario.getUsuario())
+            .password(usuario.getContrasena())
+            .authorities(Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + usuario.getRol()) // ✅ Correcto
+            ))
+            .build();
+}
 }

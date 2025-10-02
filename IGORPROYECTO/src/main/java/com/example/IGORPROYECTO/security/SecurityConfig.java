@@ -43,48 +43,49 @@ public class SecurityConfig {
     }
 
     // Configuración HTTP con la nueva API (nada deprecated)
-    @Bean
+@Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-            .authorizeHttpRequests(auth -> auth
-                // públicas
-                .requestMatchers("/", "/registro", "/guardar", "/css/**", "/js/**").permitAll()
-                
-                .requestMatchers("/administrador/**").hasRole("DIRECTOR")
-                .requestMatchers("/cliente/").hasRole("CLIENTE") 
-                .requestMatchers("/trabajador/**").hasRole("TRABAJADOR")
-                .requestMatchers("/supervisor/**").hasRole("SUPERVISOR")
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            // Públicas
+            .requestMatchers("/", "/registro", "/guardar", "/css/**", "/js/**", "/login").permitAll()
+            
+            // Roles específicos por módulo
+            .requestMatchers("/administrador/**").hasRole("DIRECTOR")
+            .requestMatchers("/cliente/**").hasRole("CLIENTE") 
+            .requestMatchers("/trabajador/**").hasRole("TRABAJADOR")
+            .requestMatchers("/supervisor/**").hasRole("SUPERVISOR")
 
-                .requestMatchers("/analisis/peticion/**").hasRole("CLIENTE")
-                .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR")
-                .requestMatchers("/analisis/kpi/**").hasRole("DIRECTOR")
-                .requestMatchers("/analisis/solicitudes/pendientes").hasRole("DIRECTOR")
-                .requestMatchers("/analisis/**").authenticated()
+            // Análisis y Reportes - ORDEN IMPORTANTE: más específico primero
+            .requestMatchers("/analisis/kpi/**").hasRole("DIRECTOR")
+            .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR")
+            .requestMatchers("/analisis/peticiones/**").hasAnyRole("DIRECTOR", "CLIENTE", "TRABAJADOR", "SUPERVISOR")
+            .requestMatchers("/analisis/**").authenticated()
 
+            // Proyectos
+            .requestMatchers("/proyectos/nuevo/**").hasAnyRole("TRABAJADOR", "SUPERVISOR", "DIRECTOR")
+            .requestMatchers("/proyectos/**").authenticated()
+            
+            // Recursos
+            .requestMatchers("/recursos/recursoNuevo/**").hasAnyRole("TRABAJADOR", "SUPERVISOR")
+            .requestMatchers("/recursos/**").authenticated()
+            
+            // Cualquier otra petición requiere autenticación
+            .anyRequest().authenticated()   
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .defaultSuccessUrl("/home", true)
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/login?logout")
+            .permitAll()
+        );
 
-                .requestMatchers("/proyectos/nuevo/").hasAnyRole("TRABAJADOR", "SUPERVISOR", "DIRECTOR")
-                .requestMatchers("/Proyectos/**").authenticated()
-                
-
-                .requestMatchers("/recursos/recursoNuevo/").hasAnyRole("TRABAJADOR", "SUPERVISOR")
-                .requestMatchers("/recursos/**").authenticated()
-
-                .requestMatchers("/proyectos/**").authenticated()
-                .requestMatchers("/recursos/**").authenticated()
-                .anyRequest().authenticated()   
-            )
-            .formLogin(form -> form
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/home", true)
-                    .permitAll()
-            )
-            .logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout")
-                    .permitAll()
-            );
-
-            http.authenticationProvider(authenticationProvider());
+    http.authenticationProvider(authenticationProvider());
 
     return http.build();
 }
