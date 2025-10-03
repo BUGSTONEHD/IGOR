@@ -1,10 +1,15 @@
 package com.example.IGORPROYECTO.controller;
 
-import com.example.IGORPROYECTO.model.Proyecto;
-import com.example.IGORPROYECTO.service.ProyectoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.IGORPROYECTO.model.Proyecto;
+import com.example.IGORPROYECTO.service.ProyectoService;
 
 @Controller
 @RequestMapping("/proyectos")
@@ -30,19 +35,6 @@ public class ProyectoController {
         return "redirect:/proyectos";     // redirige a la lista
     }
 
-    // Ver detalles de un proyecto
-    //@GetMapping("/{id}")
-    //public String verProyecto(@PathVariable String id, Model model) {
-    //    model.addAttribute("proyecto", proyectoService.buscarPorId(id));
-    //    return "proyectos/detalle";
-    //}
-
-    // Eliminar proyecto
-    //@GetMapping("/eliminar/{id}")
-    //public String eliminarProyecto(@PathVariable String id) {
-    //    proyectoService.eliminar(id);
-    //    return "redirect:/proyectos";
-    //}
 
     @GetMapping
     public String menuProyectos(Model model) {
@@ -55,10 +47,6 @@ public class ProyectoController {
         model.addAttribute("proyectos", proyectoService.consultarTodos());
         return "proyectos/consultar"; // muestra la tabla con los proyectos
     }
-
-    // ---------------------------
-    // 🔹 NUEVO: Editar Proyecto
-    // ---------------------------
 
     // Mostrar formulario de edición
     @GetMapping("/editar/{id}")

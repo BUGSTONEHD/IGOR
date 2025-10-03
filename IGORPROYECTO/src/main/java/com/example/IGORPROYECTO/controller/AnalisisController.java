@@ -1,5 +1,8 @@
 package com.example.IGORPROYECTO.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,11 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.IGORPROYECTO.model.Documentacion;
 import com.example.IGORPROYECTO.model.Kpis;
 import com.example.IGORPROYECTO.model.Peticion;
-import com.example.IGORPROYECTO.service.AnalisisService;
+import com.example.IGORPROYECTO.model.Proyecto;
 
+import com.example.IGORPROYECTO.repository.DocumentacionRepository;
+import com.example.IGORPROYECTO.repository.ProyectoRepository;
+
+import com.example.IGORPROYECTO.service.AnalisisService;
+import com.example.IGORPROYECTO.service.PdfService;
+import com.example.IGORPROYECTO.service.ProyectoService;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
 
 @Controller
 @RequestMapping("/analisis")
@@ -22,25 +35,61 @@ import lombok.RequiredArgsConstructor;
 public class AnalisisController {
 
     private final AnalisisService analisisService;
+    private final ProyectoService proyectoService;
+    private final PdfService pdfService;
+    private final ProyectoRepository proyectoRepository;
+    private final DocumentacionRepository documentacionRepository;
 
+
+    // ==================== REPORTES / GENERAR PDF ====================
+    @GetMapping("/reporte")
+        public String mostrarFormulario(Model model) {
+        model.addAttribute("proyectos", proyectoRepository.findAll());
+        return "AnalisisYReportes/generarReporte";
+    }
+
+    // Generar PDF
+    @GetMapping("/generar-pdf")
+    public void generarReporte(@RequestParam("idProyecto") String idProyecto,
+                               HttpServletResponse response) {
+        try {
+            Optional<Proyecto> proyectoOpt = proyectoRepository.findById(idProyecto);
+
+            if (proyectoOpt.isPresent()) {
+                Proyecto proyecto = proyectoOpt.get();
+
+                // Buscar documentos relacionados
+                List<Documentacion> documentos = documentacionRepository.findByNombreProyecto(proyecto.getNombre());
+
+                // Llamada al servicio que construye el PDF
+                pdfService.exportProjectPdfWithDocs(response, proyecto, documentos);
+
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Proyecto no encontrado");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Error al generar PDF: " + e.getMessage());
+            } catch (Exception ignored) {}
+        }
+    }
     // ==================== MENÚ PRINCIPAL ====================
-    
-    // Carga analisis.html cuando se accede a /analisis
     @GetMapping("")
     public String menuAnalisis(Model model) {
-        // Obtener estadísticas para mostrar en el menú
         AnalisisService.EstadisticasDTO stats = analisisService.obtenerEstadisticas();
         model.addAttribute("estadisticas", stats);
-        return "AnalisisYReportes/analisis"; 
+        return "AnalisisYReportes/analisis";
     }
 
     // ==================== KPIs ====================
-    
     @GetMapping("/kpi")
     public String registrarKPI(Model model) {
         model.addAttribute("kpi", new Kpis());
         model.addAttribute("kpis", analisisService.obtenerTodosKPIs());
-        return "AnalisisYReportes/registrarKPI"; // coincide con el archivo
+        return "AnalisisYReportes/registrarKPI";
     }
 
     @PostMapping("/kpi/guardar")
@@ -92,14 +141,10 @@ public class AnalisisController {
     }
 
     // ==================== PETICIONES ====================
-    
     @GetMapping("/peticiones")
     public String hacerPeticiones(Model model) {
         model.addAttribute("peticion", new Peticion());
-        System.out.println("🔍 Controller /peticiones ejecutado correctamente");
-        System.out.println("🔍 Retornando: AnalisisYReportes/hacerPeticion");
         return "AnalisisYReportes/hacerPeticion";
-
     }
 
     @PostMapping("/peticiones/guardar")
@@ -116,7 +161,6 @@ public class AnalisisController {
     }
 
     // ==================== SOLICITUDES/ESTADO ====================
-    
     @GetMapping("/solicitud")
     public String solicitudPeticion(Model model, @RequestParam(required = false) String estado) {
         if (estado != null && !estado.isEmpty()) {
@@ -125,7 +169,7 @@ public class AnalisisController {
         } else {
             model.addAttribute("peticiones", analisisService.obtenerTodasPeticiones());
         }
-        return "AnalisisYReportes/solicitudPeticion"; // coincide con el archivo
+        return "AnalisisYReportes/solicitudPeticion";
     }
 
     @GetMapping("/solicitud/detalle/{id}")
@@ -138,7 +182,7 @@ public class AnalisisController {
 
     @PostMapping("/solicitud/actualizar-estado")
     public String actualizarEstadoPeticion(
-            @RequestParam String id, 
+            @RequestParam String id,
             @RequestParam String estado,
             @RequestParam(required = false) Integer progreso,
             RedirectAttributes redirectAttributes) {

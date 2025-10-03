@@ -2,20 +2,24 @@ package com.example.IGORPROYECTO.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.IGORPROYECTO.model.Documentacion;
 import com.example.IGORPROYECTO.model.Proyecto;
+import com.example.IGORPROYECTO.repository.DocumentacionRepository;
 import com.example.IGORPROYECTO.repository.ProyectoRepository;
 
 @Service
 public class ProyectoService {
 
     private final ProyectoRepository proyectoRepository;
+    private final DocumentacionRepository documentacionRepository;
 
-    public ProyectoService(ProyectoRepository proyectoRepository) {
+    public ProyectoService(ProyectoRepository proyectoRepository,
+                           DocumentacionRepository documentacionRepository) {
         this.proyectoRepository = proyectoRepository;
+        this.documentacionRepository = documentacionRepository;
     }
 
     // Listar todos los proyectos
@@ -53,5 +57,15 @@ public class ProyectoService {
             proyecto.setSerial(proyectoActualizado.getSerial());
             return proyectoRepository.save(proyecto);
         }).orElseThrow(() -> new RuntimeException("Proyecto no encontrado con id: " + id));
+    }
+
+    // === NUEVO: Obtener documentación relacionada a un proyecto ===
+    public List<Documentacion> obtenerDocumentacionRelacionada(String idProyecto) {
+        Proyecto proyecto = buscarPorId(idProyecto);
+        if (proyecto == null) {
+            throw new RuntimeException("Proyecto no encontrado con id: " + idProyecto);
+        }
+        // Busca por el campo nombreProyecto en Documentacion
+        return documentacionRepository.findByNombreProyecto(proyecto.getNombre());
     }
 }

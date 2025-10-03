@@ -59,7 +59,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
             // Análisis y Reportes - ORDEN IMPORTANTE: más específico primero
             .requestMatchers("/analisis/kpi/**").hasRole("DIRECTOR")
-            .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR")
+            .requestMatchers("/analisis/solicitud/**").hasAnyRole("TRABAJADOR", "SUPERVISOR","DIRECTOR")
             .requestMatchers("/analisis/peticiones/**").hasAnyRole("DIRECTOR", "CLIENTE", "TRABAJADOR", "SUPERVISOR")
             .requestMatchers("/analisis/**").authenticated()
 
@@ -68,7 +68,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers("/proyectos/**").authenticated()
             
             // Recursos
-            .requestMatchers("/recursos/recursoNuevo/**").hasAnyRole("TRABAJADOR", "SUPERVISOR")
+            .requestMatchers("/recursos/recursoNuevo").hasAnyRole("TRABAJADOR", "SUPERVISOR", "DIRECTOR")
             .requestMatchers("/recursos/**").authenticated()
             
             // Cualquier otra petición requiere autenticación
