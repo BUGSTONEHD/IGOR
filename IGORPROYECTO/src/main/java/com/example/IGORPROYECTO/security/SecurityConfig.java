@@ -71,6 +71,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers("/recursos/recursoNuevo").hasAnyRole("TRABAJADOR", "SUPERVISOR", "DIRECTOR")
             .requestMatchers("/recursos/**").authenticated()
             
+            .requestMatchers("/enviarCorreo").permitAll()
             // Cualquier otra petición requiere autenticación
             .anyRequest().authenticated()   
         )

@@ -12,28 +12,58 @@
         <div th:replace="fragments/sidebar :: sidebar"></div>
 
         <!-- Main Content -->
-        <main class="flex-1 p-8 max-w-3xl mx-auto space-y-8">
-
-            <section class="text-center">
-                <h1 class="text-4xl font-bold mb-6">Gestión de Recursos</h1>
+        <main class="flex-1 p-8">
+            
+            <section class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800">Gestión de Recursos</h1>
+                <p class="text-gray-600 mt-2">Administra los recursos de tus proyectos</p>
             </section>
 
-            <nav class="flex flex-col space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                
+                <!-- Crear Recurso -->
                 <a th:href="@{/recursos/recursoNuevo}" 
-                   class="block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded font-semibold transition">
-                   Crear Recurso
+                   class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-8 border-t-4 border-indigo-500 hover:scale-105 transform">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-100 rounded-full p-4 mr-4">
+                            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Crear Recurso</h2>
+                    </div>
+                    <p class="text-gray-600">Registra un nuevo recurso en el sistema</p>
                 </a>
 
+                <!-- Consultar Recursos Disponibles -->
                 <a th:href="@{/recursos/recursoDisponible}" 
-                   class="block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded font-semibold transition">
-                   Consultar Recursos Disponibles
+                   class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-8 border-t-4 border-blue-500 hover:scale-105 transform">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 rounded-full p-4 mr-4">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Consultar Recursos</h2>
+                    </div>
+                    <p class="text-gray-600">Visualiza todos los recursos disponibles</p>
                 </a>
 
+                <!-- Volver al menú -->
                 <a th:href="@{/home}" 
-                   class="block bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded font-semibold transition">
-                   Volver al menú
+                   class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 p-8 border-t-4 border-gray-500 hover:scale-105 transform">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-100 rounded-full p-4 mr-4">
+                            <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Volver al Menú</h2>
+                    </div>
+                    <p class="text-gray-600">Regresa a la página principal</p>
                 </a>
-            </nav>
+
+            </div>
 
         </main>
     </div>
