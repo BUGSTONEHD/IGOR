@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generar Reporte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div th:replace="fragments/sidebar :: sidebar" class="hidden md:block"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+        <form action="/mail/enviar" method="POST">
+    <label>Correos destino (separados por comas):</label>
+    <input type="text" name="destinatarios" placeholder="correo1@test.com, correo2@test.com" required><br>
+
+    <label>Asunto:</label>
+    <input type="text" name="asunto" required><br>
+
+    <label>Mensaje:</label>
+    <textarea name="mensaje" required></textarea><br>
+
+    <button type="submit">Enviar Correo</button>
+</form>
+
+    </main>
+
+</body>
+</html>
