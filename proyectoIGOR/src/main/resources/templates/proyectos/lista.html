@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Lista de Proyectos</title>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="image/logo_temporal.png" alt="IGOR Logo">
+        <span>IGOR</span>
+
+        <div style="padding: 10px; background: #00A3E0; text-align: right;">
+            <strong><?= $tipoUsuario ?></strong>
+        </div>
+    </div>
+    <nav>
+        <ul class="listas-index">
+            <li><a href="#contact-info">Contactanos</a></li>
+
+        </ul>
+        <div class="botones-index">
+            <a class="buton">Salir</a>
+        </div>
+    </nav>
+</header>
+
+<div class="fondoLogin">
+    <img class="transicion active" src="image/fondoIndex.jpg" alt="fondofodnofodhsadas">
+</div>
+
+
+
+
+<h2>Gestión de Proyectos</h2>
+
+<a th:href="@{/proyectos/nuevo}">➕ Nuevo Proyecto</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Estado</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Responsable</th>
+        <th>Cliente</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="proyecto : ${proyectos}">
+        <td th:text="${proyecto.nombre}"></td>
+        <td th:text="${proyecto.descripcion}"></td>
+        <td th:text="${proyecto.estado}"></td>
+        <td th:text="${proyecto.fechaInicio}"></td>
+        <td th:text="${proyecto.fechaFin}"></td>
+        <td th:text="${proyecto.responsable}"></td>
+        <td th:text="${proyecto.cliente}"></td>
+        <td>
+            <a th:href="@{/proyectos/editar/{id}(id=${proyecto.id})}">Editar</a> |
+            <a th:href="@{/proyectos/eliminar/{id}(id=${proyecto.id})}">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
